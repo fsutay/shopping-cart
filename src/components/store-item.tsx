@@ -1,19 +1,16 @@
 import { Button, Card, CardImg } from "react-bootstrap"
-import { Cart, Product } from "../interface/interface"
-import { ProductRating } from "../utilities/rating"
+import { Cart, Product } from "../interface"
+import { ProductRating } from "./rating"
 import { useDispatch, useSelector } from "react-redux"
 import { addToCart, decreaseCartQuantity, removeFromCart } from "../store/cart-slice"
+import MathFunction from "../utils/MathFunctions"
 
 const StoreItem: React.FC<Product> = ({ id,
     title,
-    description,
     price,
     discountPercentage,
     category,
-    brand,
     rating,
-    stock,
-    images,
     thumbnail }) => {
 
     const dispatch = useDispatch();
@@ -69,7 +66,7 @@ const StoreItem: React.FC<Product> = ({ id,
                 <div>
                     <h5 className="text-dark mb-2">
                         {discountPercentage
-                            ? (price - (price * discountPercentage) / 100).toFixed(2) + '$'
+                            ? MathFunction.applyDiscount(price,discountPercentage).toFixed(2) + '$'
                             : price + '$'}
                     </h5>
                 </div>
@@ -107,8 +104,6 @@ const StoreItem: React.FC<Product> = ({ id,
                                     <Button variant="danger" size="sm" onClick={removeItem}>Remove</Button>
                                 </div>)
                         }
-
-
                     </div>
                 </div>
             </Card.Body>

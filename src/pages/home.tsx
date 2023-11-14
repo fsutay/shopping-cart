@@ -2,7 +2,7 @@ import { Col, Container, Row } from "react-bootstrap"
 import { getProduct } from "../service/product-servise"
 import { useEffect, useState } from "react"
 import StoreItems from "../components/store-item";
-import { Product } from "../interface/interface";
+import { Product } from "../interface";
 import img from  "../assest/img.webp"
 
 const Home :React.FC= () => {

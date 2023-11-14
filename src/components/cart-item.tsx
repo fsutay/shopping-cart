@@ -1,14 +1,11 @@
 import { Button, Stack } from 'react-bootstrap';
-import { CartItem } from '../interface/interface';
+import { CartItem } from '../interface';
 import { removeFromCart } from '../store/cart-slice';
 import { useDispatch } from 'react-redux';
+import MathFunction from '../utils/MathFunctions';
 
 const CartItemComponent: React.FC<CartItem> = ({ id: _id, quantity: _quantity, thumbnail: _thumbnail, name, price, discountPercentage }) => {
-  let newPrice: string | number = discountPercentage
-    ? (price - (price * discountPercentage) / 100).toFixed(2)
-    : price;
-  newPrice = typeof newPrice === 'string' ? parseFloat(newPrice) : newPrice;
-
+  let newPrice: number = MathFunction.applyDiscount(price,discountPercentage);
   const dispatch = useDispatch(); 
 
   const removeItem = () => {
@@ -32,10 +29,10 @@ const CartItemComponent: React.FC<CartItem> = ({ id: _id, quantity: _quantity, t
         </div>
 
         <div className="text-muted" style={{ fontSize: ".75rem" }}>
-          {newPrice}$
+          {newPrice.toFixed(2)}$
         </div>
       </div>
-      <div> {newPrice * _quantity}$</div>
+      <div> {(newPrice * _quantity).toFixed(2)}$</div>
       <Button variant="outline-danger" size="sm" onClick={removeItem}>
         &times;
       </Button>

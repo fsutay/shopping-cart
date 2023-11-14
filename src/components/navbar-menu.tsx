@@ -1,9 +1,10 @@
 import { Button, Container, Nav, Navbar, Offcanvas, Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Cart } from "../interface/interface";
+import { Cart } from "../interface";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import CartItemComponent from "./cart-item";
+import MathFunction from "../utils/MathFunctions";
 
 const NavbarMenu = () => {
   const { cartItems } = useSelector((state: { cart: Cart }) => state.cart);
@@ -11,14 +12,12 @@ const NavbarMenu = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const total = cartItems.reduce((accumulator, item) => {
-    const itemPrice = item.discountPercentage
-      ? (item.price - (item.price * item.discountPercentage) / 100)
-      : item.price;
+  const totalPrice = cartItems.reduce((accumulator, item) => {
+    const itemPrice = MathFunction.applyDiscount(item.price,item.discountPercentage);
     const itemTotal = itemPrice * item.quantity;
 
     return accumulator + itemTotal;
-  }, 0).toFixed(2);
+  }, 0);
 
   return (
     <Navbar className="bg-white shadow-sm" fixed="top">
@@ -61,7 +60,7 @@ const NavbarMenu = () => {
         </Button>
         <Offcanvas placement="end" show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Shopping Cart</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Stack style={{ gap: "3" }}>
@@ -77,7 +76,7 @@ const NavbarMenu = () => {
                 />
               ))}
               <div>
-                Total {total}$
+                Total {totalPrice.toFixed(2)}$
               </div>
             </Stack>
           </Offcanvas.Body>
